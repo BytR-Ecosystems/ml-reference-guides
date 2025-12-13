@@ -36,7 +36,8 @@ These guides are structured for how many of us actually process information:
 |-------|-------------|
 | [LogisticRegressionCV Reference](ml/qualification/LogisticRegressionCV_Reference.md) | API-style quick reference: parameters, solver compatibility, code snippets |
 | [Logistic Regression Concepts](ml/qualification/LogisticRegression_Concepts.md) | Deep dive into regularization (L1/L2/ElasticNet), C parameter, scoring metrics, geometric intuition |
-| [Qualification Model Selection Reference](ml/qualification/QualificationModelSelection_Reference.md) | Model selection strategies and best practices for classification tasks |
+| [Qualification Model Selection Reference](ml/qualification/QualificationModelSelection_Reference.md) | Copy-paste patterns for multi-model comparison, metrics, imbalance handling |
+| [Qualification Model Selection Concepts](ml/qualification/QualificationModelSelection_Concepts.md) | Understanding metrics, interpreting results, why class_weight > SMOTE, decision frameworks |
 
 ### Coming Soon
 
@@ -53,7 +54,8 @@ ml-reference-guides/
 │   └── qualification/
 │       ├── LogisticRegressionCV_Reference.md
 │       ├── LogisticRegression_Concepts.md
-│       └── QualificationModelSelection_Reference.md
+│       ├── QualificationModelSelection_Reference.md
+│       └── QualificationModelSelection_Concepts.md
 ├── pytorch/                    # Coming
 ├── llm/                        # Coming (Mistral, inference, deployment)
 ├── math/                       # Coming (linear algebra, statistics)

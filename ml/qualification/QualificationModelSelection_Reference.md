@@ -1,6 +1,6 @@
-# Qualification Model Selection: Quick Reference
+# Qualification Model Selection — Quick Reference
 
-Cross-validated comparison of multiple classifiers to qualify the best candidate before tuning.
+Cross-validated comparison of multiple classifiers. Copy-paste patterns for qualifying the best model candidate before hyperparameter tuning.
 
 ---
 
@@ -58,146 +58,43 @@ df_results = pd.DataFrame(results).set_index('Model')
 
 ---
 
-## Metrics: What They Measure
+## Metrics Reference
 
-| Metric | sklearn scoring | Measures | Use when |
-|--------|-----------------|----------|----------|
-| ROC-AUC | `'roc_auc'` | Probability ranking across all thresholds | Using `predict_proba()` for expected value/risk scoring |
-| PR-AUC | `'average_precision'` | Precision-recall trade-off, focuses on positive class | Imbalanced data, positive class is rare |
-| Recall | `'recall'` | % of actual positives caught | Missing positives is costly (fraud, damage, disease) |
-| Precision | `'precision'` | % of predicted positives that are correct | False alarms are costly |
-| F1 | `'f1'` | Harmonic mean of precision/recall | Need balance, using hard predictions |
-
-### Choosing Your Primary Metric
-
-```
-Will you use predict_proba()?
-    |
-    +-- Yes --> ROC-AUC or PR-AUC
-    |              |
-    |              +-- Balanced classes? --> ROC-AUC
-    |              +-- Imbalanced? --> PR-AUC
-    |
-    +-- No (hard predictions only)
-               |
-               +-- What's more costly?
-                      |
-                      +-- Missing positives --> Recall
-                      +-- False alarms --> Precision
-                      +-- Both matter equally --> F1
-```
+| Metric | sklearn scoring | Function | Primary use case |
+|--------|-----------------|----------|------------------|
+| ROC-AUC | `'roc_auc'` | Probability ranking across all thresholds | Probability-based decisions, balanced classes |
+| PR-AUC | `'average_precision'` | Precision-recall trade-off | Imbalanced data, focus on positive class |
+| Recall | `'recall'` | True Positive Rate | Missing positives is costly |
+| Precision | `'precision'` | Positive Predictive Value | False alarms are costly |
+| F1 | `'f1'` | Harmonic mean of precision/recall | Balance of precision and recall |
 
 ---
 
-## Handling Imbalanced Data
+## Handling Imbalance — Syntax
 
-### Option 1: class_weight='balanced' (Recommended)
-
-Adjusts loss function so minority class misclassifications are penalized proportionally higher.
+### class_weight='balanced' (Recommended)
 
 ```python
+# Scikit-learn models
 LogisticRegression(class_weight='balanced')
 SVC(class_weight='balanced')
 DecisionTreeClassifier(class_weight='balanced')
 RandomForestClassifier(class_weight='balanced')
 ```
 
-**Advantages:**
-- Preserves data integrity (no synthetic samples)
-- Maintains probability calibration (critical for `predict_proba()`)
-- No information loss
-
-### Option 2: XGBoost scale_pos_weight
-
-XGBoost uses a different parameter:
+### XGBoost: scale_pos_weight
 
 ```python
 XGBClassifier(scale_pos_weight=(y_train == 0).sum() / (y_train == 1).sum())
+# Ratio of negative to positive samples
 ```
 
-This is the ratio of negative to positive samples.
-
-### Option 3: SMOTE/Undersampling
-
-Not recommended when probability calibration matters. Synthetic samples or removed data distort probability estimates.
-
-### KNN: No class_weight Support
-
-KNN cannot handle imbalance natively. `weights='distance'` controls neighbor voting influence, not class imbalance.
+### KNN: No Native Support
 
 ```python
-# This does NOT handle imbalance:
-KNeighborsClassifier(weights='distance')  # Just weights by 1/distance
+# KNN does NOT support class_weight
+KNeighborsClassifier(weights='distance')  # Only controls neighbor voting, not class balance
 ```
-
-Exclude KNN from fair comparison when dealing with imbalanced data, or use with SMOTE (accepting calibration trade-off).
-
----
-
-## Interpreting Results
-
-### Example Output
-
-| Model | ROC-AUC | PR-AUC | Recall | Precision | F1 |
-|-------|---------|--------|--------|-----------|-----|
-| LogReg | 0.6635 ± 0.0105 | 0.4184 ± 0.0208 | 0.5822 ± 0.0233 | 0.3722 ± 0.0152 | 0.4539 ± 0.0162 |
-| RF | 0.6613 ± 0.0136 | 0.3886 ± 0.0298 | 0.0822 ± 0.0178 | 0.4785 ± 0.0977 | 0.1396 ± 0.0280 |
-
-### What to Look For
-
-**1. ROC-AUC vs Recall Mismatch**
-
-RF shows competitive ROC-AUC (0.66) but catastrophic recall (0.08). This means:
-- Probability rankings are decent overall
-- But at default threshold (0.5), it fails to identify actual positives
-- The model is too conservative despite `class_weight='balanced'`
-
-**2. Standard Deviation**
-
-Low std (± 0.01) = stable across folds. High std (± 0.05+) = sensitive to data splits.
-
-**3. PR-AUC for Imbalanced Data**
-
-PR-AUC is more informative than ROC-AUC when classes are imbalanced. A model can have high ROC-AUC but low PR-AUC if it struggles with the minority class.
-
----
-
-## Decision Framework
-
-```
-Step 1: Check class distribution
-         |
-         +-- Balanced (40-60%) --> accuracy/F1 are fine
-         +-- Moderate imbalance (20-40%) --> use class_weight, consider PR-AUC
-         +-- Severe imbalance (<20%) --> definitely PR-AUC, may need threshold tuning
-         
-Step 2: Determine prediction type needed
-         |
-         +-- Probabilities (predict_proba) --> optimize ROC-AUC or PR-AUC
-         +-- Hard labels (predict) --> optimize recall/precision/F1
-         
-Step 3: Compare models on primary metric
-         |
-         +-- But also check secondary metrics for red flags
-         +-- High ROC-AUC + low recall = threshold problem
-         +-- High precision + low recall = too conservative
-         
-Step 4: Check stability (std across folds)
-         |
-         +-- Prefer models with lower variance if close performance
-```
-
----
-
-## Common Pitfalls
-
-| Pitfall | Symptom | Solution |
-|---------|---------|----------|
-| RF ignores minority class | High ROC-AUC, near-zero recall | Try `class_weight='balanced_subsample'` or tune `min_samples_leaf` |
-| KNN unfair comparison | Poor performance vs others | Exclude from comparison or use SMOTE |
-| Optimizing wrong metric | Model performs well on metric but fails in production | Match metric to business objective |
-| Ignoring std | Picked model with highest mean but high variance | Consider stability, especially with small datasets |
-| Using accuracy | 90% accuracy on 90/10 split is useless | Never use accuracy for imbalanced data |
 
 ---
 
@@ -225,11 +122,46 @@ print(f"\n✓ Best model: {best_model_name} (ROC-AUC: {df_results.loc[best_model
 
 ---
 
+## Model-Specific Parameters
+
+### Random Forest for Imbalance
+
+```python
+# If class_weight='balanced' still produces zero recall:
+RandomForestClassifier(
+    class_weight='balanced_subsample',  # Balances each tree's bootstrap sample
+    min_samples_leaf=10,                # Prevent extreme leaf splits
+    n_estimators=200, 
+    random_state=42, 
+    n_jobs=-1
+)
+```
+
+### SVM with Probabilities
+
+```python
+# Always include probability=True if using ROC-AUC
+SVC(kernel='rbf', class_weight='balanced', probability=True, random_state=42)
+```
+
+---
+
+## Common Pitfalls — Quick Fixes
+
+| Issue | Symptom | Fix |
+|-------|---------|-----|
+| RF ignores minority class | High ROC-AUC, near-zero recall | Use `class_weight='balanced_subsample'` |
+| KNN unfair comparison | Poor performance vs others | Exclude from comparison or use SMOTE |
+| Missing probabilities | Cannot compute ROC-AUC | Add `probability=True` to SVC |
+| High variance | Large std across folds | Increase CV folds or collect more data |
+| Wrong optimization | Good metric, bad production results | Match scoring to business objective |
+
+---
+
 ## Key Takeaways
 
-1. **StratifiedKFold** is mandatory for imbalanced classification
-2. **class_weight='balanced'** preserves probability calibration, SMOTE does not
-3. **ROC-AUC** for probability-based decisions, **PR-AUC** when imbalanced
-4. **Always check recall** even if optimizing ROC-AUC: high AUC + zero recall = useless model
-5. **KNN lacks class_weight**: exclude from imbalanced comparisons or accept trade-offs
-6. **Look at std**: stable model > slightly better but volatile model
+1. **StratifiedKFold** mandatory for imbalanced data
+2. **class_weight='balanced'** preserves calibration
+3. **Check recall** even when optimizing ROC-AUC
+4. **KNN cannot handle imbalance** natively
+5. **Look at std** for stability assessment
