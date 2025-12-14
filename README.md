@@ -34,10 +34,19 @@ These guides are structured for how many of us actually process information:
 
 | Guide | Description |
 |-------|-------------|
-| [LogisticRegressionCV Reference](ml/qualification/LogisticRegressionCV_Reference.md) | API-style quick reference: parameters, solver compatibility, code snippets |
-| [Logistic Regression Concepts](ml/qualification/LogisticRegression_Concepts.md) | Deep dive into regularization (L1/L2/ElasticNet), C parameter, scoring metrics, geometric intuition |
-| [Qualification Model Selection Reference](ml/qualification/QualificationModelSelection_Reference.md) | Copy-paste patterns for multi-model comparison, metrics, imbalance handling |
-| [Qualification Model Selection Concepts](ml/qualification/QualificationModelSelection_Concepts.md) | Understanding metrics, interpreting results, why class_weight > SMOTE, decision frameworks |
+| [LogisticRegressionCV Reference](ml/scikit/supervised_learning/qualification/LogisticRegressionCV_Reference.md) | API-style quick reference: parameters, solver compatibility, code snippets |
+| [Logistic Regression Concepts](ml/scikit/supervised_learning/qualification/LogisticRegression_Concepts.md) | Deep dive into regularization (L1/L2/ElasticNet), C parameter, scoring metrics, geometric intuition |
+| [Qualification Model Selection Reference](ml/scikit/supervised_learning/qualification/QualificationModelSelection_Reference.md) | Copy-paste patterns for multi-model comparison, metrics, imbalance handling |
+| [Qualification Model Selection Concepts](ml/scikit/supervised_learning/qualification/QualificationModelSelection_Concepts.md) | Understanding metrics, interpreting results, why class_weight > SMOTE, decision frameworks |
+
+### Regression (scikit-learn)
+
+#### Quantile Regression
+
+| Guide | Description |
+|-------|-------------|
+| [Quantile Regression Reference](ml/scikit/supervised_learning/quantile_regression/Quantile_Regression_Reference.md) | API-style quick reference: parameters, estimators, code snippets |
+| [Quantile Regression Concepts](ml/scikit/supervised_learning/quantile_regression/Quantile_Regression_Concepts.md) | Understanding quantile loss, when to use vs OLS, interpretability, practical applications |
 
 ### Coming Soon
 
@@ -51,11 +60,16 @@ These guides are structured for how many of us actually process information:
 ```
 ml-reference-guides/
 ├── ml/
-│   └── qualification/
-│       ├── LogisticRegressionCV_Reference.md
-│       ├── LogisticRegression_Concepts.md
-│       ├── QualificationModelSelection_Reference.md
-│       └── QualificationModelSelection_Concepts.md
+│   └── scikit/
+│       └── supervised_learning/
+│           ├── qualification/
+│           │   ├── LogisticRegressionCV_Reference.md
+│           │   ├── LogisticRegression_Concepts.md
+│           │   ├── QualificationModelSelection_Reference.md
+│           │   └── QualificationModelSelection_Concepts.md
+│           └── quantile_regression/
+│               ├── Quantile_Regression_Reference.md
+│               └── Quantile_Regression_Concepts.md
 ├── pytorch/                    # Coming
 ├── llm/                        # Coming (Mistral, inference, deployment)
 ├── math/                       # Coming (linear algebra, statistics)
