@@ -24,6 +24,12 @@ Quick reference docs for ML practitioners. Two files per topic: Reference (synta
 
 Extended example: [tech_assistant_config.yaml](llm-platforms/chatgpt/config/examples/tech_assistant_config.yaml)
 
+#### Claude
+
+| Topic | File |
+|-------|------|
+| Reference Guide Skill | [reference-guide-SKILL.md](llm-platforms/claude/skills/reference-guide-SKILL.md) |
+
 ---
 
 ## Structure
@@ -31,12 +37,15 @@ Extended example: [tech_assistant_config.yaml](llm-platforms/chatgpt/config/exam
 ```
 ml-reference-guides/
 ├── llm-platforms/
-│   └── chatgpt/
-│       └── config/
-│           ├── examples/
-│           ├── chatgpt_config_template.yaml
-│           ├── ChatGPT_Config_Reference.md
-│           └── ChatGPT_Config_Concepts.md
+│   ├── chatgpt/
+│   │   └── config/
+│   │       ├── examples/
+│   │       ├── chatgpt_config_template.yaml
+│   │       ├── ChatGPT_Config_Reference.md
+│   │       └── ChatGPT_Config_Concepts.md
+│   └── claude/
+│       └── skills/
+│           └── reference-guide-SKILL.md
 ├── ml/
 │   └── scikit/
 │       └── supervised_learning/
