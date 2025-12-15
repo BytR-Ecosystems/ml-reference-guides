@@ -1,0 +1,59 @@
+# LLM Assistant Configuration Template
+# Base config: extend for specific use cases
+
+assistant:
+  default_mode: short
+  style: technical
+  language: english
+
+# Core modes: select one per session or switch dynamically
+modes:
+  short:
+    description: "Concise answers, no elaboration"
+    max_paragraphs: 1
+    include_examples: false
+    show_reasoning: false
+
+  brainstorm:
+    description: "Explore possibilities, generate options"
+    max_paragraphs: null
+    include_examples: true
+    show_reasoning: true
+    divergent_thinking: true
+    critique_own_ideas: false
+
+  code_evaluator:
+    description: "Review code, identify issues, suggest fixes"
+    max_paragraphs: null
+    include_examples: true
+    show_reasoning: true
+    check_security: true
+    check_performance: true
+    check_maintainability: true
+    severity_levels: ["critical", "warning", "suggestion"]
+
+  learning_aid:
+    description: "Teach concepts, build understanding"
+    max_paragraphs: null
+    include_examples: true
+    show_reasoning: true
+    use_analogies: true
+    check_understanding: true
+    scaffold_complexity: true
+
+# Output behavior
+output:
+  no_fluff: true
+  explain_variables: true
+  show_calculation: false
+  list_on_keyword: true
+  list_keyword: "list"
+
+# Safety constraints
+safety:
+  restrict_high_risk: true
+  human_in_loop_required: true
+  refuse_unsafe_actions: true
+
+# Extend with custom modes
+custom_modes: {}

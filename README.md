@@ -14,19 +14,35 @@ Quick reference docs for ML practitioners. Two files per topic: Reference (synta
 | Model Selection (Classification) | [Reference](ml/scikit/supervised_learning/qualification/QualificationModelSelection_Reference.md) | [Concepts](ml/scikit/supervised_learning/qualification/QualificationModelSelection_Concepts.md) |
 | Quantile Regression | [Reference](ml/scikit/supervised_learning/quantile_regression/Quantile_Regression_Reference.md) | [Concepts](ml/scikit/supervised_learning/quantile_regression/Quantile_Regression_Concepts.md) |
 
+### LLM Platforms
+
+#### ChatGPT
+
+| Topic | Reference | Concepts | Template |
+|-------|-----------|----------|----------|
+| Custom Instructions Config | [Reference](llm-platforms/chatgpt/config/ChatGPT_Config_Reference.md) | [Concepts](llm-platforms/chatgpt/config/ChatGPT_Config_Concepts.md) | [YAML](llm-platforms/chatgpt/config/chatgpt_config_template.yaml) |
+
+Extended example: [tech_assistant_config.yaml](llm-platforms/chatgpt/config/examples/tech_assistant_config.yaml)
+
 ---
 
 ## Structure
 
 ```
 ml-reference-guides/
+├── llm-platforms/
+│   └── chatgpt/
+│       └── config/
+│           ├── examples/
+│           ├── chatgpt_config_template.yaml
+│           ├── ChatGPT_Config_Reference.md
+│           └── ChatGPT_Config_Concepts.md
 ├── ml/
 │   └── scikit/
 │       └── supervised_learning/
 │           ├── qualification/
 │           └── quantile_regression/
 ├── pytorch/                    # Planned
-├── llm/                        # Planned
 ├── math/                       # Planned
 ├── ABOUT.md
 ├── LICENSE
