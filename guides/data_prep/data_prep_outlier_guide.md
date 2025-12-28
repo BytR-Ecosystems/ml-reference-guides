@@ -191,5 +191,5 @@ results = {
 
 ---
 
-*Reference guide created for ML Project: Smurf Hotel Guest Profitability Prediction*  
+*Reference guide created for ML Project: Guest Profitability Prediction*  
 *Last updated: December 2025*
